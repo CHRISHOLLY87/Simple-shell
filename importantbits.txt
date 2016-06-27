@@ -1,0 +1,33 @@
+your rrsh-server will wait for users to connect
+
+then will consult a configuration file (rrshusers.txt) to verify that the user is allowed to access the rrsh-server.
+
+the rrsh-server will verify that the commands typed by the user are allowed commands.
+
+the rrsh-server will look in a configuration file called rrshcommands.txt for a list of allowable programs (commands) that can be run.
+
+Commands that are not in the list will be denied by your rrsh server.
+
+You will also write the rrsh-client program. The rrsh-client program will read commands from the user's terminal and then pass them on to the rrsh-server to be executed on the remote machine.
+
+Your rrsh-server should listen for incoming TCP connections using the IPaddress INADDR_ANY and a TCPport number specified as a command line parameter to your rrsh-server.
+
+Your rrsh-server will be invoked with the command:
+
+./rrsh-server TCPport
+
+where TCPport is the port number where your rrsh-server will listen for incoming connections.
+
+Your rrsh-server will read two config files from the current working directory at startup:
+
+rrshusers.txt contains a list of users that are allowed to access the server. The file contains one user per line, where a user is specified by their username and password (separated by one or more space characters). Blank lines should be ignored.
+
+rrshcommands.txt contains a list of commands (i.e., executable programs) that users may execute. The file contains one command (program) per line. Programs are specified using the file's full path name (e.g., /bin/ls). No parameters are allowed. Blank lines should be ignored.
+
+The ``login protocol'' used by the rrsh-client to access the rrsh-cserver will exchange the following information:
+
+The client sends the user's username followed by '\n'.
+The client then sends the user's password followed by '\n'.
+The server will respond with either ``Login Approved\n'' or ``Login Failed\n''. If the login failed, the server will close the connection.
+
+Usernames and passwords can be up to 40 characters long. The server will only accept and handle commands for one user at at time (i.e., only one user can be ``logged in'' at any given time).

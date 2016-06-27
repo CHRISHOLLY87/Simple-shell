@@ -1,0 +1,74 @@
+Documentation
+  Kendall Weihe
+  Steve Pearce
+
+Essential functions:
+  - eval
+    - calls p3parseline to parse input into argv char array
+    - is the command already builtin? (that is, is it a default command or has it been dynamically linked?)
+      - YES
+        - call builtin function
+        - OR
+        - call the function pointer to the shared library function
+      - NO
+        - is the command supposed to run in the background?
+          - YES
+            - add necessary data to data structures
+              - to later be used in functions such as bgjobs
+        - fork and execve the UNIX command
+          - if fails then, "Command not found"
+  - builtin_command
+    - return 0 if the command is already built in
+    - return 1 if the command is not a built in command
+  - execute_user_defined
+    - finds the correct pointer to function based on command char array
+  - loadpluggin
+    - open .so file
+    - link pluggin_method object
+      - extract CommandName, FunctionName, and AnalyzerName char arrays and store in data structure
+    - link function to pointer to function data structure (array in our case)
+  - file_redirection
+    - scan command input (argv) until end of input is reached
+    - is there an infile redirection operator?
+      - YES
+        - open file to read from
+        - dup to redirect to STDIN_FILENO macro
+    - is there an outfile redirection operator?
+      - YES
+        - create new file to write to
+        - dup to redirect to STDOUT_FILENO
+
+Data structures used:
+  - NewBuiltIn pluggin_method
+    - holds user defined pluggin data
+  - background_jobs
+    - holds names of background processes
+      - this array is in parallel with pids and job_numbers
+  - pids
+    - holds process ID's of background processes
+      - this array is in parallel with background_jobs and job_numbers
+  - job_numbers
+    - holds the shell defined job numbers for background processes
+      - this array is in parallel with background_jobs and pids
+  - commands
+    - char array of command names
+      - this array is in parallel with functions and analyzers
+  - functions
+    - char array of function names
+      - this array is in parallel with commands and analyzers
+  - analyzers
+    - char array of analyzer names
+      - this array is in parallel with commands and functions
+  - builtin_commands
+    - char array of all built in commands -- a cumulative list of default and user defined
+  - *function
+    - array of pointers to functions for user defined pluggin functions
+
+Limitations:
+  - command bgjobs
+    - when this command is invoked, it overwrites all background_jobs names
+      - given more time, this bug could've been worked out
+  - file redirection
+    - due to limited time, we were unable to fully test this functionality of the shell
+  - initialize_builtin function
+    - check comments

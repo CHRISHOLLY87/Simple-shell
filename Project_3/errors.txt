@@ -1,0 +1,10 @@
+Errors
+  builtin_files arrays with double quotes:
+    upsh.c:26:2: error: (near initialization for ‘builtin_functions’)
+    upsh.c:26:2: error: excess elements in char array initializer
+  builtin_files array with single quotes:
+    warning: character constant too long for its type [enabled by default]
+    './comment.so', './setprompt.so', './cd.so', './bgjobs.so', './fg.so', './loadpluggin.so', './culater.so'
+  WHICH IS CORRECT?
+
+  

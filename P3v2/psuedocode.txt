@@ -1,0 +1,57 @@
+Shell Psuedocode
+
+  global data structure
+    pluggin_method
+      -> used to find the funcion names of user defined pluggins
+    builtin_files
+      -> stores the file names of built in pluggins
+        -> used in opening the built in shared libraries
+    builtin_functions
+      -> stores the names of the built in functions
+        -> used to append pointers to functions in the below data structure
+    pointers_to_functions
+      -> stores all pointers to functions of different shared libraries
+        -> the ordering is the same of builtin_functions --> making searching for pointers to functions easier
+        -> used to execute shared library functions
+
+  main
+    initializes built in commands
+    takes input
+    passes to eval
+
+  eval
+    parses line
+    if already built in then call execute_built_in
+    if not run execve() for unix commands
+    wait for background processes
+
+  builtin_command
+    checks if this is a command that has already been built into the shell
+
+  initialize_built_in
+    loops 7 times (7 built in commands)
+    each time appending the pointer to each function into pointers_to_functions
+
+  execute_built_in
+    scans builtin_functions until it finds the correct string
+    uses this index value as the index of the pointers_to_functions
+    executes the function using the pointer to the function
+
+Pluggin Psuedocode
+
+  loadpluggin
+    dlsym to return pointer from pluggin_method object
+    dlsym to return pointer to function => by using pluggin_method->FunctionName //from previous step
+    appends function name to builtin_functions
+    appends pointer to function to pointers_to_functions
+
+  comment
+    nothing
+
+  bgjobs
+    forks
+    execs with unix program "jobs"
+    waits for process to terminate
+
+  setprompt
+    updates global variable prompt with argv[1]
